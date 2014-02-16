@@ -6,6 +6,7 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
+	"github.com/sfreiberg/gotwilio"
 	"hash"
 	"math/rand"
 	"strconv"
@@ -15,6 +16,13 @@ import (
 var hasher hash.Hash = sha512.New()
 
 func main() {
+
+	accountSid := "ACda22d76d1f0ca22dae6d9d8cff1307f6"
+	authToken := "ca1704c1b5df5cdf98b564574edc69c9"
+	twilio := gotwilio.NewTwilioClient(accountSid, authToken)
+
+	from := "+14177202086"
+	to := "+14179880783"
 
 	// Seed the rng
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -27,9 +35,10 @@ func main() {
 		num := strconv.FormatInt(rand.Int63n(1800000000000000000), 10)
 		h := doHash(num)
 		count := countLeadingZeros(h)
-		if count > 7 {
+		if count > 5 {
 			fmt.Printf("\nCOUNT OF %d, Source: %s\n", count, num)
 			fmt.Println(h)
+			twilio.SendSMS(from, to, "Got a "+strconv.FormatInt(int64(count), 10)+": "+num, "", "")
 		}
 	}
 }
