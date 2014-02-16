@@ -27,7 +27,7 @@ func main() {
 		num := strconv.FormatInt(rand.Int63n(1800000000000000000), 10)
 		h := doHash(num)
 		count := countLeadingZeros(h)
-		if count > 6 {
+		if count > 7 {
 			fmt.Printf("\nCOUNT OF %d, Source: %s\n", count, num)
 			fmt.Println(h)
 		}
